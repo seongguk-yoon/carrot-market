@@ -15,7 +15,7 @@ const CommunityPostDetail: NextPage = () => {
           </p>
         </div>
       </div>
-      <div></div>
+   
       <div className="mt-2 text-gray-700">
         <span className="text-orange-500 font-medium px-2.5">Q.</span>
         만두 음식점 추천 좀 해주세용~
