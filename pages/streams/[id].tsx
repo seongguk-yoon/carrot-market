@@ -1,7 +1,10 @@
 import { NextPage } from "next";
+import Layout from '../../components/layout';
+
 
 const LiveDetail: NextPage = () => {
   return (
+    <Layout canGoBack>
     <div className="py-10 px-4 space-y-4">
       <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
       <h3 className=" text-gray-800 font-semibold text-2xl mt-2">렛츠 게렛</h3>
@@ -82,6 +85,7 @@ const LiveDetail: NextPage = () => {
         
       </div>
     </div>
+    </Layout>
   );
 };
 

@@ -1,7 +1,9 @@
 import { NextPage } from "next";
+import Layout from '../../components/layout';
 
 const EditProfile: NextPage = () => {
   return (
+    <Layout canGoBack>
     <div className="py-10 px-4 space-y-4">
         <div className=' flex items-center space-x-3'>
             <div className='w-14 h-14  rounded-full bg-slate-300' />
@@ -44,6 +46,7 @@ const EditProfile: NextPage = () => {
         내 정보 수정하기
       </button>
     </div>
+    </Layout>
   );
 };
 

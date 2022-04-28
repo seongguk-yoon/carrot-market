@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
+import Layout from '../../components/layout';
 
 const Chats: NextPage = () => {
   return (
+    <Layout title='채팅' hasTabBar>
     <div className="py-10 divide-y-[1px]">
       {[1, 2, 3, 4, 5, 6].map((_, i) => (
         <div
@@ -18,6 +20,7 @@ const Chats: NextPage = () => {
         </div>
       ))}
     </div>
+    </Layout>
   );
 };
 
