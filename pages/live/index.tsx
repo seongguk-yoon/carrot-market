@@ -8,10 +8,12 @@ const Live: NextPage = () => {
     <Layout title="라이브" hasTabBar>
       <div className="py-10 px-4   divide-y-2 space-y-4">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
-          <div className=" pt-4 px-4" key={i}>
-            <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-            <h3 className=" text-gray-700 text-lg mt-2">렛츠 게렛</h3>
-          </div>
+          <Link href={`/live/${i}`} key={i}>
+            <a className=" pt-4 px-4">
+              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
+              <h1 className=" text-gray-700 text-lg mt-2">렛츠 게렛</h1>
+            </a>
+          </Link>
         ))}
 
         <FloatingButton href="/live/create">
