@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import Layout from '../../components/layout';
+import Button from "../../components/button";
+
 
 const ItemDetail: NextPage = () => {
   return (
@@ -10,13 +12,13 @@ const ItemDetail: NextPage = () => {
         <div className='flex py-3 border-t border-b items-center space-x-3  cursor-pointer'>
           <div className='w-12 h-12 rounded-full bg-slate-300'/>
           <div>
-            <p className='text-sm font-medium text-gray-700'>Steve Jebs</p>
-            <p className='text-xs font-medium text-gray-500 '>View profile &rarr;</p>
+            <p className='text-sm font-medium text-gray-700'>동네 아자씨</p>
+            <p className='text-xs font-medium text-gray-500 '>판매자 정보보기 &rarr;</p>
           </div>
         </div>
         <div className='mt-5'>
           <h1 className='text-3xl font-bold text-gray-900 '>Galaxy S50</h1>
-          <p className='text-3xl mt-3 text-gray-900 block'>$140</p>
+          <p className='text-3xl mt-3 text-gray-900 block'>140,000원</p>
           <p className='text-base my-6 text-gray-700 '>
             My money&apos;s in that office, right? If she start giving me some
             bullshit about it ain&apos;t there, and we got to go someplace else
@@ -28,7 +30,7 @@ const ItemDetail: NextPage = () => {
             motherfucker to get shot. You understand?
           </p>
           <div className='flex items-center justify-between space-x-2'>
-            <button className='flex-1 bg-orange-500 text-white py-3 rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  font-medium hover:bg-orange-600'>Talk to seller</button>
+            <Button large text="판매자에게 문의하기" />
             <button className='py-3 flex items-center justify-center text-gray-400 hover:bg-gray-500 rounded-md'>
               <svg
                 className="h-6 w-6 "
@@ -50,13 +52,13 @@ const ItemDetail: NextPage = () => {
         </div>
       </div>
       <div>
-        <h2 className='text-2xl font-bold text-gray-900'>Similar items</h2>
+        <h2 className='text-2xl font-bold text-gray-900'>비슷한 상품</h2>
         <div className='grid grid-cols-2 gap-4 mt-6'>
           {[1, 2, 3, 4, 5, 6].map((_, i) => (
             <div key={i}>
               <div className='h-56 w-full mb-4 bg-slate-300'/>
               <h3 className=' text-gray-700  -mb-1 '>Galaxy S60</h3>
-              <p className='text-sm font-medium text-gray-900'>$6</p>
+              <p className='text-sm font-medium text-gray-900'>60,000원</p>
             </div>
           ))}
         </div>
