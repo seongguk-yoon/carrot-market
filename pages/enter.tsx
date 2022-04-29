@@ -1,13 +1,30 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import Button from "../components/button";
 import Input from "../components/input";
 import { cls } from "../libs/utils";
+interface EntterForm {
+  email?: string;
+  phone?: string;
+}
 
 const Enter: NextPage = () => {
+  const { register, reset, handleSubmit } = useForm<EntterForm>();
+
   const [method, setMethod] = useState<"email" | "phone">("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset();
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset();
+    setMethod("phone");
+  };
+
+  const onValid = (data: EntterForm) => {
+    console.log(data);
+  };
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">당근 마켓</h3>
@@ -39,12 +56,22 @@ const Enter: NextPage = () => {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8 space-y-4">
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="flex flex-col mt-8 space-y-4"
+        >
           {method === "email" ? (
-            <Input name="email" label="이메일" type="email" required />
+            <Input
+              register={register("email", {})}
+              name="email"
+              label="이메일"
+              type="email"
+              required
+            />
           ) : null}
           {method === "phone" ? (
             <Input
+              register={register("phone", {})}
               name="phone"
               label="휴대폰 번호"
               type="number"
@@ -53,9 +80,7 @@ const Enter: NextPage = () => {
             />
           ) : null}
           {method === "email" ? <Button text={"로그인하기"} /> : null}
-          {method === "phone" ? (
-            <Button text={"휴대폰 인증하기"} />
-          ) : null}
+          {method === "phone" ? <Button text={"휴대폰 인증하기"} /> : null}
         </form>
 
         <div className="mt-8">
