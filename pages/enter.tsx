@@ -3,15 +3,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../components/button";
 import Input from "../components/input";
-import { cls } from "../libs/utils";
-interface EntterForm {
+import { cls } from "../libs/client/utils";
+import useMutation from "../libs/client/useMutation";
+
+interface EnterForm {
   email?: string;
   phone?: string;
 }
 
 const Enter: NextPage = () => {
-  const { register, reset, handleSubmit } = useForm<EntterForm>();
-
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
+  const { register, reset, handleSubmit } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
     reset();
@@ -22,9 +24,13 @@ const Enter: NextPage = () => {
     setMethod("phone");
   };
 
-  const onValid = (data: EntterForm) => {
-    console.log(data);
+  const onValid = (validForm: EnterForm) => {
+    if (loading) return;
+    enter(validForm);
   };
+
+  console.log(loading, data, error);
+
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">당근 마켓</h3>
@@ -62,16 +68,17 @@ const Enter: NextPage = () => {
         >
           {method === "email" ? (
             <Input
-              register={register("email", {})}
+              register={register("email")}
               name="email"
               label="이메일"
               type="email"
+              kind="text"
               required
             />
           ) : null}
           {method === "phone" ? (
             <Input
-              register={register("phone", {})}
+              register={register("phone")}
               name="phone"
               label="휴대폰 번호"
               type="number"
@@ -80,7 +87,9 @@ const Enter: NextPage = () => {
             />
           ) : null}
           {method === "email" ? <Button text={"로그인하기"} /> : null}
-          {method === "phone" ? <Button text={"휴대폰 인증하기"} /> : null}
+          {method === "phone" ? (
+            <Button text={loading ? "로딩중" : "휴대폰 인증하기"} />
+          ) : null}
         </form>
 
         <div className="mt-8">
