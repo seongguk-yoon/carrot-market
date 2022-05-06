@@ -1,49 +1,45 @@
 import client from "@libs/server/client";
-import witeHandler from "@libs/server/withHandler";
+import witeHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import twilio from "twilio";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   const { email, phone } = req.body;
-  const payload = phone ? { phone: +phone } : { email };
-
+  const user = phone ? { phone: +phone } : email ? { email } : null;
+  if (!user) return res.status(400).json({ ok: false });
+  const payload = Math.floor(100000 + Math.random() * 900000) + "";
   const token = await client.token.create({
     data: {
-      payload: "1234",
+      payload,
       user: {
         connectOrCreate: {
           where: {
-            ...payload,
+            ...user,
           },
           create: {
             name: "TokenGguk",
-            ...payload,
+            ...user,
           },
         },
       },
     },
   });
-  console.log(token);
-
-  // if (phone) {
-  //   user = await client.user.findUnique({
-  //     where: {
-  //       phone: +phone,
-  //     },
-  //   });
-  //   if (user) console.log("이미유저네요?");
-  //   if (!user) {
-  //     console.group("없읍니다. 생성완료요~");
-  //     user = await client.user.create({
-  //       data: {
-  //         name: "seongguk",
-  //         phone: +phone,
-  //       },
-  //     });
-  //   }
-  //   console.log(user);
-  // }
-
-  return res.status(200).end();
+  if (phone) {
+    /*  const message = await twilioClient.messages.create({
+      messagingServiceSid: process.env.TWILIO_MSID,
+      to: process.env.My_PHONE!,
+      body: `당신의 메시지를 입력해주세요 ${payload}`,
+    });
+    console.log(message); */
+  }
+  return res.json({
+    ok: true,
+  });
 }
 
 export default witeHandler("POST", handler);
