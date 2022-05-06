@@ -71,7 +71,7 @@ const Enter: NextPage = () => {
               required
             />
 
-            <Button text={tokenloading ? "로딩중" : "토근인증"} />
+            <Button text={tokenloading ? "로딩중" : "토큰인증"} />
           </form>
         ) : (
           <>
