@@ -22,43 +22,37 @@ interface MutationResult {
 
 const Enter: NextPage = () => {
   const [enter, { loading, data, error }] =
-    useMutation<MutationResult>("/api/users/enter");
+  useMutation<MutationResult>("/api/users/enter");
+const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+  useMutation<MutationResult>("/api/users/confirm");
+const { register, handleSubmit, reset } = useForm<EnterForm>();
+const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+  useForm<TokenForm>();
+const [method, setMethod] = useState<"email" | "phone">("email");
+const onEmailClick = () => {
+  reset();
+  setMethod("email");
+};
+const onPhoneClick = () => {
+  reset();
+  setMethod("phone");
+};
+const onValid = (validForm: EnterForm) => {
+  if (loading) return;
+  enter(validForm);
+};
+const onTokenValid = (validForm: TokenForm) => {
+  if (tokenLoading) return;
+  confirmToken(validForm);
+};
+const router = useRouter();
+useEffect(() => {
+  if (tokenData?.ok) {
+    router.push("/");
+  }
+}, [tokenData, router]);
 
-  const [ConfirmToken, { loading: tokenloading, data: tokendata }] =
-    useMutation<MutationResult>("/api/users/confirm");
 
-  const { register, reset, handleSubmit } = useForm<EnterForm>();
-  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
-    useForm<TokenForm>();
-
-  const [method, setMethod] = useState<"email" | "phone">("email");
-  const onEmailClick = () => {
-    reset();
-    setMethod("email");
-  };
-  const onPhoneClick = () => {
-    reset();
-    setMethod("phone");
-  };
-
-  const onValid = (validForm: EnterForm) => {
-    if (loading) return;
-    enter(validForm);
-  };
-
-  const onTokenValid = (validForm: TokenForm) => {
-    if (tokenloading) return;
-    ConfirmToken(validForm);
-  };
-
-  console.log(data);
-
-  const router = useRouter();
-  useEffect(() => {
-    if (tokendata?.ok) {
-      router.push("/");
-    }
-  }, [tokendata, router]);
 
   return (
     <div className="mt-16 px-4">
@@ -79,7 +73,7 @@ const Enter: NextPage = () => {
               required
             />
 
-            <Button text={tokenloading ? "로딩중" : "토큰인증"} />
+            <Button text={tokenLoading ? "로딩중" : "토큰인증"} />
           </form>
         ) : (
           <>

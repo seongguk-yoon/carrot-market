@@ -3,9 +3,12 @@ import Layout from "../components/layout";
 import FloatingButton from "../components/floating-button";
 import Item from "../components/item";
 import useUser from "@libs/client/useUser";
+import useSWR from 'swr';
 
 const Home: NextPage = () => {
-  const user = useUser();
+  const {} = useSWR("")
+  const {user} = useUser();
+
   console.log(user);
   return (
     <Layout title="홈" hasTabBar>
