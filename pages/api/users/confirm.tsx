@@ -25,4 +25,10 @@ async function handler(
   });
 }
 
-export default withApiSession(witeHandler("POST", handler));
+export default withApiSession(
+  witeHandler({
+    method: "POST",
+    handler,
+    isPrivate: false,
+  })
+);

@@ -17,4 +17,10 @@ async function handler(
   res.status(200).end();
 }
 
-export default withApiSession(witeHandler("GET", handler));
+export default withApiSession(
+  witeHandler({
+    method: "GET",
+    handler,
+    isPrivate: true,
+  })
+);
