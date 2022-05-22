@@ -1,28 +1,28 @@
-import { withIronSessionApiRoute } from "iron-session/next";
 import client from "@libs/server/client";
 import witeHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import { withApiSession } from "@libs/server/withSession";
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  console.log(req.session);
   const { token } = req.body;
-
-  const exists = await client.token.findUnique({
+  const foundToken = await client.token.findUnique({
     where: {
       payload: token,
     },
-    //  include: { user: true },
+    include: { user: true },
   });
-  if (!exists) res.status(404).end();
-  req.session.user = { id: exists?.userId };
+  if (!foundToken) return res.status(404).end();
+  req.session.user = { id: foundToken.userId };
   await req.session.save();
-  res.status(200).end();
+  await client.token.deleteMany({
+    where: { userId: foundToken.userId },
+  });
+  res.json({
+    ok: true,
+  });
 }
 
-export default withIronSessionApiRoute(witeHandler("POST", handler), {
-  cookieName: "carrot session",
-  password: "3213124125125215123213123141241215413542535234534124124124124124",
-});
+export default withApiSession(witeHandler("POST", handler));

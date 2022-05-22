@@ -6,7 +6,7 @@ import Layout from "../../components/layout";
 const Community: NextPage = () => {
   return (
     <Layout hasTabBar title="동네생활">
-      <div className="space-y-4 divide-y-[2px]">
+      <div className="space-y-4 divide-y-[1px]">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
           <Link key={i} href={`/community/${i}`}>
             <a className="flex cursor-pointer flex-col pt-4 items-start">
@@ -14,7 +14,7 @@ const Community: NextPage = () => {
                 동네질문
               </span>
               <div className="mt-2 px-4 text-gray-700">
-                <span className="text-orange-500 font-medium  mr-1">Q.</span> 
+                <span className="text-orange-500 font-medium  mr-1">Q.</span>
                 중국집 잘하는 곳 그곳은 어딘가요?
               </div>
               <div className="mt-5 px-4 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
