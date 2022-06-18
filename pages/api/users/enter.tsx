@@ -51,5 +51,5 @@ async function handler(
   });
 }
 
-export default witeHandler({ method: "POST", handler, isPrivate: false });
+export default witeHandler({ methods: ["GET", "POST"], handler, isPrivate: false });
 

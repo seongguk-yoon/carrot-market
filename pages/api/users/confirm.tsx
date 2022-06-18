@@ -27,7 +27,7 @@ async function handler(
 
 export default withApiSession(
   witeHandler({
-    method: "POST",
+    methods: ["GET", "POST"],
     handler,
     isPrivate: false,
   })
