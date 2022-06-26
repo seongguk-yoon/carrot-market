@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Answer, Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -7,6 +8,8 @@ import TextArea from "../../components/textarea";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import { useForm } from "react-hook-form";
+
 interface AnswerWithUser extends Answer {
   user: User;
 }
@@ -26,6 +29,15 @@ interface CommunityPostResponse {
   isWondering: boolean;
 }
 
+interface AnswerFrom {
+  answer: string;
+}
+
+interface AnswerResponse {
+  ok: boolean;
+  response: Answer;
+}
+
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { data, mutate } = useSWR<CommunityPostResponse>(
@@ -33,9 +45,27 @@ const CommunityPostDetail: NextPage = () => {
   );
   console.log(data);
 
-  const [wonder, { data: wonderdata, loading, error }] = useMutation(
+  const {
+    register,
+    watch,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<AnswerFrom>({
+    mode: "onChange",
+  });
+
+  const answer = watch("answer");
+  console.log(answer, errors);
+
+  const [wonder, { data: wonderData, loading, error }] = useMutation(
     `/api/posts/${router?.query?.id}/wonder`
   );
+
+  const [
+    sendanswer,
+    { data: answerData, loading: answerLoading, error: answerError },
+  ] = useMutation<AnswerResponse>(`/api/posts/${router?.query?.id}/answer`);
 
   const onWonderClick = () => {
     if (!data) return;
@@ -55,9 +85,22 @@ const CommunityPostDetail: NextPage = () => {
       },
       false
     );
-    wonder({});
-     wonder({});
+    if (!loading) {
+      wonder({});
+    }
   };
+
+  const onVaild = (form: AnswerFrom) => {
+    if (answerLoading) return;
+    sendanswer(form);
+  };
+
+  useEffect(() => {
+    if (answerData && answerData.ok) {
+      reset();
+      mutate();
+    }
+  }, [answerData, reset,mutate]);
   return (
     <Layout canGoBack>
       <div>
@@ -87,7 +130,7 @@ const CommunityPostDetail: NextPage = () => {
               onClick={onWonderClick}
               className={cls(
                 "flex space-x-2 items-center text-sm",
-                data?.isWondering ? "text-teal-400" : ""
+                data?.isWondering ? "text-teal-600" : ""
               )}
             >
               <svg
@@ -141,16 +184,33 @@ const CommunityPostDetail: NextPage = () => {
             </div>
           ))}
         </div>
-        <div className="px-4">
+        <form onSubmit={handleSubmit(onVaild)} className="px-4">
           <TextArea
-            name="description"
-            placeholder="Answer this question!"
-            required
+            register={{
+              ...register("answer", {
+                required: true,
+                minLength: { value: 5, message: "5자이상 입력해주세요" },
+                maxLength: { value: 100, message: "100자이내로 작성해주세요" },
+              }),
+            }}
+            name="answer"
+            placeholder="댓글을 작성해주세요"
           />
-          <button className="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none ">
-            Reply
-          </button>
-        </div>
+          <p className="text-[15px] text-red-500">{errors?.answer?.message}</p>
+
+          {answer && !errors?.answer ? (
+            <button className="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none ">
+              {answerLoading ? "로딩중" : "댓글달기"}
+            </button>
+          ) : (
+            <button
+              disabled
+              className="mt-2 w-full bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none "
+            >
+              댓글달기
+            </button>
+          )}
+        </form>
       </div>
     </Layout>
   );

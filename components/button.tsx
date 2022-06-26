@@ -4,12 +4,14 @@ interface ButtonProps {
   large?: boolean;
   text: string;
   [key: string]: any;
+  gray? : boolean
 }
 
 export default function Button({
   large = false,
   onClick,
   text,
+  gray,
   ...rest
 }: ButtonProps) {
   return (
@@ -17,7 +19,8 @@ export default function Button({
       {...rest}
       className={cls(
         "w-full bg-orange-500 hover:bg-orange-600 text-white  px-4 border border-transparent rounded-md shadow-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none",
-        large ? "py-3 text-base" : "py-2 text-sm "
+        large ? "py-3 text-base" : "py-2 text-sm ",
+        gray ?  'bg-gray-400 hover:bg-gray-500'  : ''
       )}
     >
       {text}
