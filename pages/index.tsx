@@ -30,12 +30,12 @@ const Home: NextPage = () => {
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (
           <Item
-            id={product.id}
-            key={product.id}
-            title={product.name}
-            price={product.price}
+            id={product?.id}
+            key={product?.id}
+            title={product?.name}
+            price={product?.price}
             //comments={1}
-            hearts={product._count.favs}
+            hearts={product?._count.favs}
           />
         ))}
         <FloatingButton href="/products/upload">
