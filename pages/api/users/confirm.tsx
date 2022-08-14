@@ -1,6 +1,6 @@
-import client from "@libs/server/client";
-import witeHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
+import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
 async function handler(
@@ -12,23 +12,20 @@ async function handler(
     where: {
       payload: token,
     },
-    include: { user: true },
   });
   if (!foundToken) return res.status(404).end();
-  req.session.user = { id: foundToken.userId };
+  req.session.user = {
+    id: foundToken.userId,
+  };
   await req.session.save();
   await client.token.deleteMany({
-    where: { userId: foundToken.userId },
+    where: {
+      userId: foundToken.userId,
+    },
   });
-  res.json({
-    ok: true,
-  });
+  res.json({ ok: true });
 }
 
 export default withApiSession(
-  witeHandler({
-    methods: ["GET", "POST"],
-    handler,
-    isPrivate: false,
-  })
+  withHandler({ methods: ["POST"], handler, isPrivate: false })
 );

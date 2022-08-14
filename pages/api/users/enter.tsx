@@ -1,9 +1,11 @@
-import client from "@libs/server/client";
-import witeHandler, { ResponseType } from "@libs/server/withHandler";
-import { NextApiRequest, NextApiResponse } from "next";
+//import mail from "@sendgrid/mail";
 import twilio from "twilio";
+import { NextApiRequest, NextApiResponse } from "next";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
+import client from "@libs/server/client";
 
-// const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+//mail.setApiKey(process.env.SENDGRID_KEY!);
+//const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
   req: NextApiRequest,
@@ -22,7 +24,7 @@ async function handler(
             ...user,
           },
           create: {
-            name: "seonguk",
+            name: "Anonymous",
             ...user,
           },
         },
@@ -51,5 +53,4 @@ async function handler(
   });
 }
 
-export default witeHandler({ methods: ["GET", "POST"], handler, isPrivate: false });
-
+export default withHandler({ methods: ["POST"], handler, isPrivate: false });
